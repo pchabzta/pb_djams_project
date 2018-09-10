@@ -1,0 +1,186 @@
+{% extends "ams_admin_base_html.html" %}
+
+{% load account_tags %}
+
+{% load static %}
+{% load humanize %}
+
+{% block title %}Current tenants{% endblock %}
+
+{% block script %}
+    <link href="{% static "css/ams_body.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block style %}
+
+    <style>
+
+
+        div #hx {
+            float: left;
+        }
+
+        div #da {
+            clear: both;
+        }
+
+        #hrn {
+
+            display: block;
+            width: 4em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: left;
+            font-size: medium;
+        }
+
+        #hname {
+
+            display: block;
+            width: 13em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: left;
+            font-size: medium;
+        }
+
+        #hhp {
+
+            display: block;
+            width: 9em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: center;
+            font-size: medium;
+        }
+
+        #hpin {
+
+            display: block;
+            width: 9em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: center;
+            font-size: medium;
+        }
+
+        #hsd {
+
+            display: block;
+            width: 8em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: right;
+            font-size: medium;
+        }
+
+        #hrmc, #hadj, #hovd {
+
+            display: block;
+            width: 5em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: right;
+            font-size: medium;
+        }
+
+        .rn {
+
+            display: block;
+            width: 4em;
+            color: red;
+        {#background-color: blue;#} float: left;
+            text-align: left;
+            font-size: medium;
+        }
+
+        .name {
+
+            display: block;
+            width: 13em;
+        {#color: white;#}{#background-color: blue;#} float: left;
+            text-align: left;
+            font-size: medium;
+        }
+
+        .hp {
+
+            display: block;
+            width: 9em;
+        {#color: white;#}{#background-color: yellow;#} float: left;
+            text-align: center;
+            font-size: medium;
+        }
+
+        .pin {
+
+            display: block;
+            width: 9em;
+        {#color: white;#}{#background-color: blue;#} float: left;
+            text-align: center;
+            font-size: medium;
+        }
+
+        .sd {
+
+            display: block;
+            width: 8em;
+        {#color: white;#}{#background-color: yellow;#} float: left;
+            text-align: right;
+            font-size: medium;
+        }
+
+        .rmc, .adj, .ovd {
+
+            display: block;
+            width: 5em;
+        {#color: white;#}{#background-color: lightgrey;#} float: left;
+            text-align: right;
+            font-size: medium;
+        }
+
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+    <h2>Current Tenants( {{ current_dt }} )</h2>
+
+    <div id="hx">
+        <label id="hrn">RNO</label>
+        <label id="hname">NAME</label>
+        <label id="hhp">HP</label>
+        <label id="hpin">PIN</label>
+
+        <label id="hrmc">RMC</label>
+        <label id="hadj">ADJ</label>
+        <label id="hovd">OVD</label>
+        <label id="hsd">S-DATE</label>
+        <br>
+    </div>
+
+    <div id="da">
+
+        {% for e in cur_tenant %}
+            <span class="rn">{{ e.room_no }}</span>
+            <span class="name">{{ e.tenant }}</span>
+            <span class="hp">{{ e.phone }}</span>
+            <span class="pin">{{ e.pin }}</span>
+
+
+            <span class="rmc">{{ e.room_no.room_type.rate|floatformat:0|intcomma }}</span>
+            <span class="adj">{{ e.adjust|floatformat:0|intcomma }}</span>
+            <span class="ovd">{{ e.cum_ovd|floatformat:0|intcomma }}</span>
+            <span class="sd">{{ e.start_date }}</span><br>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

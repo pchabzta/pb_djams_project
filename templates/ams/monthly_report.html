@@ -1,0 +1,303 @@
+
+
+{% extends "ams_admin_base_html.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Monthly Report{% endblock %}
+
+{% block script %}
+    <link href="{% static "css/ams_body.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block style %}
+
+    <style>
+
+        div #hx #hb_ref {
+
+            display: block;
+            width: 4em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: left;
+            font-size: medium;
+        }
+
+        div #hx #hname {
+
+            display: block;
+            width: 12em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: center;
+            font-size: medium;
+        }
+
+        div #hx #hroom {
+
+            display: block;
+            width: 3em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: center;
+            font-size: medium;
+        }
+
+        div #hx #hp_date {
+
+            display: block;
+            width: 7em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: right;
+            font-size: medium;
+        }
+
+        div #hx #hrc, div #hx #hrac, div #hx #hec, div #hx #hwc, div #hx #hcsc, div #hx #hosc, div #hx #hovd, div #hx #hadj, div #hx #hbt, div #hx #hp_amt, div #hx #hbf {
+            display: block;
+            width: 5em;
+            color: white;
+            background-color: blue;
+            float: left;
+            text-align: right;
+            font-size: medium;
+        }
+
+        div #dab .bill_ref {
+            display: block;
+            width: 4em;
+            text-align: left;
+            float: left;
+            font-size: medium;
+            color: #de1710;
+        }
+
+        div #dab .room {
+            display: block;
+            width: 3em;
+            text-align: center;
+            float: left;
+            font-size: medium;
+        }
+
+        div #dab .name {
+            display: block;
+            width: 12em;
+            text-align: left;
+            float: left;
+            font-size: medium;
+        }
+
+        div #dab .p_date {
+            display: block;
+            width: 7em;
+            text-align: right;
+            float: left;
+            font-size: medium;
+        }
+
+        div #dab .room_cost, div #dab .room_acc, div #dab .elec, div #dab .water, div #dab .com_ser, div #dab .oth_com_ser, div #dab .ovd, div #dab .adj, div #dab .total, div #dab .p_amt, .bf {
+            display: block;
+            width: 5em;
+            text-align: right;
+            float: left;
+            font-size: medium;
+        }
+
+        #atotal .name, #btotal .name, #abtotal .name {
+
+            display: block;
+            width: 12em;
+            text-align: left;
+            float: left;
+            font-size: medium;
+        }
+
+        #atotal .room, #btotal .room, #abtotal .room {
+            display: block;
+            width: 3em;
+            text-align: center;
+            float: left;
+            font-size: medium;
+        }
+
+        .xtotal {
+            display: block;
+            width: 19em;
+            text-align: center;
+            float: left;
+            font-size:medium;
+            background-color: #0ac33e;
+        }
+
+        div #atotal .p_date, div #btotal .p_date, div #abtotal .p_date {
+            display: block;
+            width: 7em;
+            text-align: right;
+            float: left;
+            font-size: medium;
+            color: #0ac33e;
+            background-color: #0ac33e;
+        }
+
+        div #atotal .room_cost, div #atotal .room_acc, div #atotal .elec, div #atotal .water, div #atotal .com_ser, div #atotal .oth_com_ser, div #atotal .ovd, div #atotal .adj, div #atotal .total, div #atotal .p_amt, div #atotal .bf,
+        div #btotal .room_cost, div #btotal .room_acc, div #btotal .elec, div #btotal .water, div #btotal .com_ser, div #btotal .oth_com_ser, div #btotal .ovd, div #btotal .adj, div #btotal .total, div #btotal .p_amt, div #btotal .bf,
+        div #abtotal .room_cost, div #abtotal .room_acc, div #abtotal .elec, div #abtotal .water, div #abtotal .com_ser, div #abtotal .oth_com_ser, div #abtotal .ovd, div #abtotal .adj, div #abtotal .total, div #abtotal .p_amt, div #abtotal .bf {
+            display: block;
+            width: 5em;
+            text-align: right;
+            float: left;
+            font-size: medium;
+            background-color: #0ac33e;
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+    <h2>Monthly Report-{{ mnth_name }} {{ yr }} (Building: {{ bld }} )</h2>
+
+    <div id="hx">
+        <label id="hb_ref">REF.</label>
+        <label id="hname">NAME</label>
+        <label id="hroom">RMN</label>
+        <label id="hrc">RC</label>
+        <label id="hrac">RAC</label>
+        <label id="hec">EC</label>
+        <label id="hwc">WC</label>
+        <label id="hcsc">CSC</label>
+        <label id="hosc">OSC</label>
+        <label id="hovd">OVD</label>
+
+        <label id="hadj">ADJ</label>
+
+        <label id="hbt">TOTAL</label>
+        <label id="hp_amt">P_AMT</label>
+        <label id="hbf">B/F</label>
+        <label id="hp_date">P_DATE</label>
+
+        <br>
+    </div>
+
+    <div id="dab">
+        {% if opl_a %}
+            {% for opbl in opl_a %}
+                <span class="bill_ref">{{ opbl.bill_ref }}</span>
+                <span class="name">{{ opbl.tenant_name }}</span>
+                <span class="room">{{ opbl.room_no }}</span>
+                <span class="room_cost">{{ opbl.room_cost|floatformat:0|intcomma }}</span>
+                <span class="room_acc">{{ opbl.room_acc_cost |floatformat:0|intcomma }}</span>
+                <span class="elec">{{ opbl.electricity_cost|floatformat:0|intcomma }}</span>
+                <span class="water">{{ opbl.water_cost|floatformat:0|intcomma }}</span>
+                <span class="com_ser">{{ opbl.common_ser_cost |floatformat:0|intcomma }}</span>
+                <span class="oth_com_ser">{{ opbl.other_ser_cost|floatformat:0|intcomma }}</span>
+                <span class="ovd">{{ opbl.overdue_amount|floatformat:0|intcomma }}</span>
+
+                <span class="adj">{{ opbl.adjust|floatformat:0|intcomma }}</span>
+
+                <span class="total">{{ opbl.bill_total|floatformat:0|intcomma }}</span>
+                <span class="p_amt">{{ opbl.payment_amount|floatformat:0|intcomma }}</span>
+                <span class="bf">{{ opbl.cf_amount|floatformat:0|intcomma }}</span>
+                <span class="p_date">{{ opbl.payment_date }}</span>
+                <br>
+            {% endfor %}
+        {% endif %}
+
+        {% if opl_b %}
+            {% for opbl in opl_b %}
+                <span class="bill_ref">{{ opbl.bill_ref }}</span>
+                <span class="name">{{ opbl.tenant_name }}</span>
+                <span class="room">{{ opbl.room_no }}</span>
+                <span class="room_cost">{{ opbl.room_cost|floatformat:0|intcomma }}</span>
+                <span class="room_acc">{{ opbl.room_acc_cost|floatformat:0|intcomma }}</span>
+                <span class="elec">{{ opbl.electricity_cost |floatformat:0|intcomma }}</span>
+                <span class="water">{{ opbl.water_cost|floatformat:0|intcomma }}</span>
+                <span class="com_ser">{{ opbl.common_ser_cost|floatformat:0|intcomma }}</span>
+                <span class="oth_com_ser">{{ opbl.other_ser_cost |floatformat:0|intcomma }}</span>
+                <span class="ovd">{{ opbl.overdue_amount|floatformat:0|intcomma }}</span>
+
+                <span class="adj">{{ opbl.adjust|floatformat:0|intcomma }}</span>
+
+                <span class="total">{{ opbl.bill_total|floatformat:0|intcomma }}</span>
+                <span class="p_amt">{{ opbl.payment_amount|floatformat:0|intcomma }}</span>
+                <span class="bf">{{ opbl.cf_amount|floatformat:0|intcomma }}</span>
+                <span class="p_date">{{ opbl.payment_date }}</span>
+                <br>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+
+    <div id="atotal">
+        {% if opl_a and not opl_b %}
+            <span class="xtotal">TOTAL</span>
+            <span class="room_cost">{{ trc_a|floatformat:0|intcomma }}</span>
+            <span class="room_acc">{{ trac_a|floatformat:0|intcomma }}</span>
+            <span class="elec">{{ tec_a |floatformat:0|intcomma }}</span>
+            <span class="water">{{ twc_a|floatformat:0|intcomma }}</span>
+            <span class="com_ser">{{ tcsc_a|floatformat:0|intcomma }}</span>
+            <span class="oth_com_ser">{{ tosc_a|floatformat:0|intcomma }}</span>
+            <span class="ovd">{{ tovd_a|floatformat:0|intcomma }}</span>
+
+            <span class="adj">{{ tadj_a|floatformat:0|intcomma }}</span>
+
+            <span class="total">{{ tbt_a|floatformat:0|intcomma }}</span>
+            <span class="p_amt">{{ tpa_a|floatformat:0|intcomma }}</span>
+            <span class="bf">{{ tbf_a|floatformat:0|intcomma }}</span>
+            <span class="p_date">.</span>
+            <br>
+
+        {% endif %}
+
+    </div>
+
+    <div id="btotal">
+        {% if opl_b and not opl_a %}
+            <span class="xtotal">TOTAL</span>
+            <span class="room_cost">{{ trc_b|floatformat:0|intcomma }}</span>
+            <span class="room_acc">{{ trac_b|floatformat:0|intcomma }}</span>
+            <span class="elec">{{ tec_b |floatformat:0|intcomma }}</span>
+            <span class="water">{{ twc_b|floatformat:0|intcomma }}</span>
+            <span class="com_ser">{{ tcsc_b|floatformat:0|intcomma }}</span>
+            <span class="oth_com_ser">{{ tosc_b|floatformat:0|intcomma }}</span>
+            <span class="ovd">{{ tovd_b|floatformat:0|intcomma }}</span>
+
+            <span class="adj">{{ tadj_b|floatformat:0|intcomma }}</span>
+
+            <span class="total">{{ tbt_b|floatformat:0|intcomma }}</span>
+            <span class="p_amt">{{ tpa_b|floatformat:0|intcomma }}</span>
+            <span class="bf">{{ tbf_b|floatformat:0|intcomma }}</span>
+            <span class="p_date">.</span>
+            <br>
+        {% endif %}
+
+    </div>
+
+    <div id="abtotal">
+        {% if opl_a and opl_b %}
+            <span class="xtotal">TOTAL</span>
+            <span class="room_cost">{{ trc_ab|floatformat:0|intcomma }}</span>
+            <span class="room_acc">{{ trac_ab|floatformat:0|intcomma }}</span>
+            <span class="elec">{{ tec_ab |floatformat:0|intcomma }}</span>
+            <span class="water">{{ twc_ab|floatformat:0|intcomma }}</span>
+            <span class="com_ser">{{ tcsc_ab|floatformat:0|intcomma }}</span>
+            <span class="oth_com_ser">{{ tosc_ab|floatformat:0|intcomma }}</span>
+            <span class="ovd">{{ tovd_ab|floatformat:0|intcomma }}</span>
+
+            <span class="adj">{{ tadj_ab|floatformat:0|intcomma }}</span>
+
+            <span class="total">{{ tbt_ab|floatformat:0|intcomma }}</span>
+            <span class="p_amt">{{ tpa_ab|floatformat:0|intcomma }}</span>
+            <span class="bf">{{ tbf_ab|floatformat:0|intcomma }}</span>
+            <span class="p_date">.</span>
+            <br>
+        {% endif %}
+    </div>
+
+{% endblock %}
