@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,7 @@
     {#    <link rel="shortcut icon" href={% static "pics/icons8-home-50.png" %}>#}
     <link rel="shortcut icon" href={% static "pics/icon_globe_12195.png" %}>
     <link href="{% static "css/header.css" %}" rel="stylesheet">
-    {#    <link href="{% static "css/ams_body.css" %}" rel="stylesheet">#}
+
 
 
     {% block script %}
@@ -18,8 +18,8 @@
         #content {
             height: 980px;
             background-image: url("/static/pics/bg1.jpg");
-            background-position: center center;
-            background-size: 100% 100%;
+            background-position: center;
+            background-size: 100%;
             background-repeat: no-repeat;
         }
     </style>

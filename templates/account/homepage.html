@@ -1,11 +1,11 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}Hompage{% endblock %}</title>
 
     <link href="{% static "css/header.css" %}" rel="stylesheet">
-    {#    <link href="{% static "css/ams_body.css" %}" rel="stylesheet">#}
+
 
 
     {% block script %}
@@ -15,8 +15,8 @@
         #content {
             height: 980px;
             background-image: url("/static/pics/hp3.jpg");
-            background-position: center center;
-            background-size: 100% 100%;
+            background-position: center;
+            background-size: 100%;
             background-repeat: no-repeat;
         }
     </style>
