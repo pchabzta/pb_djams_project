@@ -16,11 +16,10 @@ from ams.models import Billing, Extra, Room_type
 import datetime
 from django.utils.dateparse import parse_datetime, parse_date
 from django.utils.timezone import is_aware, is_naive, make_aware, make_naive
+# -----SMS FROM LOCALHOST & WEB------------------------------------------
+import os
 from twilio.rest import Client
-# -----SMS FROM WEB------------------------------------------------------
-# import os
-# from twilio.rest import Client
-# from twilio.http.http_client import TwilioHttpClient
+from twilio.http.http_client import TwilioHttpClient
 # -----------------------------------------------------------------------
 import GV
 
@@ -939,9 +938,11 @@ def room_type_rate(request):
 def current_tenant(request):
     cur_tenant = TenantProfile.objects.all().order_by('start_date')
 
+    total_tn = cur_tenant.count()
+
     current_dt = datetime.datetime.now()
 
-    return render(request, 'ams/current_tenant.html', {'cur_tenant': cur_tenant, 'current_dt': current_dt})
+    return render(request, 'ams/current_tenant.html', {'cur_tenant': cur_tenant, 'current_dt': current_dt, 'total_tn':total_tn})
 
 
 # @login_required
@@ -988,6 +989,7 @@ def vacant_rooms(request):
                   {'cur_tenant': cur_tenant, 'vc_rooms': vc_rooms, 'current_dt': current_dt})
 
 
+# SENDING MESSAGE FROM LOCALHOST ************************************************************************
 def send_message(to_phone_no, msg):
     account_sid = GV.Account_SID
     auth_token = GV.Auth_Token
@@ -997,41 +999,32 @@ def send_message(to_phone_no, msg):
     tenant_phone_no = '+66' + to_phone_no
     sending_message = msg
 
-    # SENDING MESSAGE ********************************************************************************
+    # SENDING MESSAGE *********************************************************************************
     message = client.messages.create(to=tenant_phone_no, from_=sending_phone_no, body=sending_message)
 
-    # print(message.sid)
-    # ************************************************************************************************
+    # *************************************************************************************************
 
 
-# -------SMS FROM WEB -----------------------------------------------------------------------------------------------------------
+# # SENDING MESSAGE FROM WEB ******************************************************************************
 # def send_message(to_phone_no, msg):
 #
-#     #---SMS FROM WEB--------------------------------------------------
 #     proxy_client = TwilioHttpClient()
 #     proxy_client.session.proxies = {'https':os.environ['https_proxy']}
-#      # ----------------------------------------------------------------
 #
 #     account_sid = GV.Account_SID
 #     auth_token = GV.Auth_Token
 #
-#
-#     #---SMS FROM WEB--------------------------------------------------
 #     client = Client(account_sid, auth_token, http_client=proxy_client)
-#     # ----------------------------------------------------------------
-#     sending_phone_no = GV.Sending_Phone_No
 #
+#     sending_phone_no = GV.Sending_Phone_No
 #     tenant_phone_no = '+66' + to_phone_no
 #     sending_message = msg
 #
 #     # SENDING MESSAGE ********************************************************************************
 #     message = client.messages.create(to=tenant_phone_no, from_=sending_phone_no, body=sending_message)
 #
-#     # print(message.sid)
+#
 #     # ************************************************************************************************
-#
-#
-# #------------------------------------------------------------------------------------------------------------------------------------
 
 
 def send_bill_sms_to_all_tenants(request):
@@ -1229,7 +1222,7 @@ def tenant_bill(request):
 
         except Exception as err:
             # messages.error(request, 'ERROR: {} '.format(str(err)))
-            now_month = str(datetime.datetime.now().month-1)
+            now_month = str(datetime.datetime.now().month - 1)
 
             tn_bill = get_object_or_404(Billing, tenant_name=tenant, status='close', bill_date__month=now_month)
 

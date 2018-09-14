@@ -4,6 +4,7 @@ import markdown
 from django.shortcuts import get_object_or_404
 
 from ams.models import Billing
+from account.models import TenantProfile
 
 register = template.Library()
 
@@ -51,3 +52,61 @@ def display_tenant_bill_data(rmno):
     tenant_bill = get_object_or_404(Billing, room_no=rmno, status='open')
 
     return {'tenant_bill': tenant_bill}
+
+
+@register.simple_tag
+def room_acc_cost(rmno):
+    tenant_pf = get_object_or_404(TenantProfile, room_no__room_no=rmno)
+    extra = tenant_pf.extra.all()
+
+    exd = {}
+    exd.setdefault('Electricity CPU', 0)
+    exd.setdefault('Water CPU', 0)
+    exd.setdefault('Garbage', 0)
+    exd.setdefault('Parking', 0)
+    exd.setdefault('Wifi', 0)
+    exd.setdefault('Cable TV', 0)
+    exd.setdefault('Bed', 0)
+    exd.setdefault('Bed accessories', 0)
+    exd.setdefault('Dressing Table', 0)
+    exd.setdefault('Clothing Cupboard', 0)
+    exd.setdefault('TV Table', 0)
+    exd.setdefault('Fridge', 0)
+    exd.setdefault('Air-Conditioner', 0)
+
+    for e in extra:
+        exd.update({e.desc: e.cpu})
+
+    room_acc_cost = exd['Bed'] + exd['Bed accessories'] + exd['Dressing Table'] \
+                    + exd['Clothing Cupboard'] + exd['TV Table'] + exd['Fridge'] \
+                    + exd['Air-Conditioner']
+
+    return '{0:3,.0f}'.format(room_acc_cost)
+
+
+@register.simple_tag
+def room_other_cost(rmno):
+    tenant_pf = get_object_or_404(TenantProfile, room_no__room_no=rmno)
+    extra = tenant_pf.extra.all()
+
+    exd = {}
+    exd.setdefault('Electricity CPU', 0)
+    exd.setdefault('Water CPU', 0)
+    exd.setdefault('Garbage', 0)
+    exd.setdefault('Parking', 0)
+    exd.setdefault('Wifi', 0)
+    exd.setdefault('Cable TV', 0)
+    exd.setdefault('Bed', 0)
+    exd.setdefault('Bed accessories', 0)
+    exd.setdefault('Dressing Table', 0)
+    exd.setdefault('Clothing Cupboard', 0)
+    exd.setdefault('TV Table', 0)
+    exd.setdefault('Fridge', 0)
+    exd.setdefault('Air-Conditioner', 0)
+
+    for e in extra:
+        exd.update({e.desc: e.cpu})
+
+    oth_ser_cost = exd['Garbage'] + exd['Parking'] + exd['Wifi'] + exd['Cable TV']
+
+    return '{0:>3,.0f}'.format(oth_ser_cost)

@@ -1,6 +1,7 @@
 {% extends "ams_admin_base_html.html" %}
 
 {% load account_tags %}
+{% load ams_tags %}
 
 {% load static %}
 {% load humanize %}
@@ -27,7 +28,7 @@
         #hrn {
 
             display: block;
-            width: 4em;
+            width: 3em;
             color: white;
             background-color: blue;
             float: left;
@@ -38,7 +39,7 @@
         #hname {
 
             display: block;
-            width: 13em;
+            width: 12em;
             color: white;
             background-color: blue;
             float: left;
@@ -49,7 +50,7 @@
         #hhp {
 
             display: block;
-            width: 9em;
+            width: 7em;
             color: white;
             background-color: blue;
             float: left;
@@ -60,7 +61,7 @@
         #hpin {
 
             display: block;
-            width: 9em;
+            width: 8em;
             color: white;
             background-color: blue;
             float: left;
@@ -79,10 +80,11 @@
             font-size: medium;
         }
 
-        #hrmc, #hadj, #hovd {
+        #hrmc, #hadj, #hovd,
+        #hrmacc, #hrmoc, #hdepo {
 
             display: block;
-            width: 5em;
+            width: 4em;
             color: white;
             background-color: blue;
             float: left;
@@ -93,9 +95,9 @@
         .rn {
 
             display: block;
-            width: 4em;
+            width: 3em;
             color: red;
-        {#background-color: blue;#} float: left;
+            float: left;
             text-align: left;
             font-size: medium;
         }
@@ -103,8 +105,8 @@
         .name {
 
             display: block;
-            width: 13em;
-        {#color: white;#}{#background-color: blue;#} float: left;
+            width: 12em;
+            float: left;
             text-align: left;
             font-size: medium;
         }
@@ -112,8 +114,8 @@
         .hp {
 
             display: block;
-            width: 9em;
-        {#color: white;#}{#background-color: yellow;#} float: left;
+            width: 7em;
+            float: left;
             text-align: center;
             font-size: medium;
         }
@@ -121,8 +123,8 @@
         .pin {
 
             display: block;
-            width: 9em;
-        {#color: white;#}{#background-color: blue;#} float: left;
+            width: 8em;
+            float: left;
             text-align: center;
             font-size: medium;
         }
@@ -131,16 +133,17 @@
 
             display: block;
             width: 8em;
-        {#color: white;#}{#background-color: yellow;#} float: left;
+            float: left;
             text-align: right;
             font-size: medium;
         }
 
-        .rmc, .adj, .ovd {
+        .rmc, .adj, .ovd,
+        .rmacc, .rmoc, .depo {
 
             display: block;
-            width: 5em;
-        {#color: white;#}{#background-color: lightgrey;#} float: left;
+            width: 4em;
+            float: left;
             text-align: right;
             font-size: medium;
         }
@@ -151,15 +154,17 @@
 
 
 {% block content %}
-    <h2>Current Tenants( {{ current_dt }} )</h2>
+    <h2>Current Tenants as of {{ current_dt }} : [{{ total_tn }}]</h2>
 
     <div id="hx">
         <label id="hrn">RNO</label>
         <label id="hname">NAME</label>
         <label id="hhp">HP</label>
         <label id="hpin">PIN</label>
-
         <label id="hrmc">RMC</label>
+        <label id="hrmacc">RAC</label>
+        <label id="hrmoc">ROC</label>
+        <label id="hdepo">DEPO</label>
         <label id="hadj">ADJ</label>
         <label id="hovd">OVD</label>
         <label id="hsd">S-DATE</label>
@@ -168,17 +173,18 @@
 
     <div id="da">
 
-        {% for e in cur_tenant %}
-            <span class="rn">{{ e.room_no }}</span>
-            <span class="name">{{ e.tenant }}</span>
-            <span class="hp">{{ e.phone }}</span>
-            <span class="pin">{{ e.pin }}</span>
-
-
-            <span class="rmc">{{ e.room_no.room_type.rate|floatformat:0|intcomma }}</span>
-            <span class="adj">{{ e.adjust|floatformat:0|intcomma }}</span>
-            <span class="ovd">{{ e.cum_ovd|floatformat:0|intcomma }}</span>
-            <span class="sd">{{ e.start_date }}</span><br>
+        {% for tn in cur_tenant %}
+            <span class="rn">{{ tn.room_no }}</span>
+            <span class="name">{{ tn.tenant }}</span>
+            <span class="hp">{{ tn.phone }}</span>
+            <span class="pin">{{ tn.pin }}</span>
+            <span class="rmc">{{ tn.room_no.room_type.rate|floatformat:0|intcomma }}</span>
+            <span class="rmacc">{% room_acc_cost tn.room_no.room_no %}  </span>
+            <span class="rmoc">{% room_other_cost tn.room_no.room_no %} </span>
+            <span class="depo">{{ tn.deposit|floatformat:0|intcomma }}</span>
+            <span class="adj">{{ tn.adjust|floatformat:0|intcomma }}</span>
+            <span class="ovd">{{ tn.cum_ovd|floatformat:0|intcomma }}</span>
+            <span class="sd">{{ tn.start_date }}</span><br>
         {% endfor %}
 
     </div>
