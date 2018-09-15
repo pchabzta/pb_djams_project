@@ -617,12 +617,12 @@ def payment(request):
 #     return render(request, 'ams/report_type.html', {'section': 'report'})
 
 
-# @login_required
+@login_required
 def report_type(request):
     return render(request, 'ams/report_type.html', {'section': 'report'})
 
 
-# @login_required
+@login_required
 def report_parameters(request):
     return render(request, 'ams/report_parameters.html', {'section': 'report'})
 
@@ -662,7 +662,7 @@ def get_aware_datetime(date_str):
     return ret
 
 
-# @login_required
+@login_required
 def monthly_report(request):
     bld = request.POST['bld']
     if bld == 'AB':
@@ -875,7 +875,7 @@ def monthly_report(request):
                                                        })
 
 
-# @login_required
+@login_required
 def extra_service(request):
     extra = Extra.objects.all().order_by('id')
 
@@ -884,7 +884,7 @@ def extra_service(request):
     return render(request, 'ams/extra_service.html', {'extra': extra, 'current_dt': current_dt})
 
 
-# @login_required
+@login_required
 def elec_cpu_change(request):
     if request.method == 'POST':
         elec_cpu_form = Elec_cpu_change(request.POST)
@@ -905,7 +905,7 @@ def elec_cpu_change(request):
     return render(request, 'ams/elec_cpu_change.html', {'elec_cpu_form': elec_cpu_form})
 
 
-# @login_required
+@login_required
 def water_cpu_change(request):
     if request.method == 'POST':
         water_cpu_form = Water_cpu_change(request.POST)
@@ -925,7 +925,7 @@ def water_cpu_change(request):
     return render(request, 'ams/water_cpu_change.html', {'water_cpu_form': water_cpu_form})
 
 
-# @login_required
+@login_required
 def room_type_rate(request):
     rm_type_rate = Room_type.objects.all()
 
@@ -934,7 +934,7 @@ def room_type_rate(request):
     return render(request, 'ams/room_type_rate.html', {'rm_type_rate': rm_type_rate, 'current_dt': current_dt})
 
 
-# @login_required
+@login_required
 def current_tenant(request):
     cur_tenant = TenantProfile.objects.all().order_by('start_date')
 
@@ -945,7 +945,7 @@ def current_tenant(request):
     return render(request, 'ams/current_tenant.html', {'cur_tenant': cur_tenant, 'current_dt': current_dt, 'total_tn':total_tn})
 
 
-# @login_required
+@login_required
 def vacant_rooms(request):
     oc_rooms = []
     vc_rooms = []
@@ -1026,7 +1026,7 @@ def send_message(to_phone_no, msg):
 #
 #     # ************************************************************************************************
 
-
+@login_required
 def send_bill_sms_to_all_tenants(request):
     bills = Billing.objects.filter(status='open').order_by('id')
 
@@ -1093,7 +1093,7 @@ def send_bill_sms_to_all_tenants(request):
     return HttpResponseRedirect(reverse_lazy('misc_contents'))
 
 
-# @login_required
+@login_required
 def send_sms_to_individual_room(request):
     bills = Billing.objects.filter(status='open').order_by('id')
 
@@ -1148,7 +1148,7 @@ def send_sms_to_individual_room(request):
     return HttpResponseRedirect(reverse_lazy('misc_contents'))
 
 
-# @login_required
+@login_required
 def send_general_sms(request):
     if request.method == 'POST':
         phone_msg_form = PhoneNoMessage(request.POST)
@@ -1166,7 +1166,7 @@ def send_general_sms(request):
         return render(request, 'ams/send_general_sms.html', {'phone_msg_form': phone_msg_form})
 
 
-# @login_required
+@login_required
 def misc_contents(request):
     return render(request, 'ams/misc_contents.html', {'section': 'misc'})
 
@@ -1212,7 +1212,7 @@ def tenant_page(request):
                       {'section': 'tenant_profile', 'tenant_pf': tenant_pf, 'room_acc_cost': room_acc_cost,
                        'oth_ser_cost': oth_ser_cost, 'cur_dt': cur_dt})
 
-
+@login_required
 def tenant_bill(request):
     tenant = str(request.user)
     bills = Billing.objects.filter(tenant_name=tenant)
@@ -1282,7 +1282,7 @@ def tenant_bill(request):
         # NEW TENANT ******************************************
         return HttpResponseRedirect(reverse_lazy('new_tenant'))
 
-
+@login_required
 def new_tenant(request):
     tenant_name = str(request.user)
 
