@@ -24,12 +24,12 @@ from twilio.http.http_client import TwilioHttpClient
 import GV
 
 
-# @login_required
+@login_required
 def tenant_comment(request):
     return render(request, 'ams/tenant_comment.html', {'section': 'comment'})
 
 
-# @login_required
+@login_required
 def tenant_record(request):
     return render(request, 'ams/tenant_record.html', {'section': 'record'})
 
@@ -50,7 +50,7 @@ def update_pf_and_bill(roomno, cd):
     pf.save()
 
 
-# @login_required
+@login_required
 def payment(request):
     # bills were created in order from first room to last room
     bills = Billing.objects.filter(status='open').order_by('id')
@@ -1171,7 +1171,7 @@ def misc_contents(request):
     return render(request, 'ams/misc_contents.html', {'section': 'misc'})
 
 
-# @login_required
+@login_required
 def tenant_page(request):
     usr = str(request.user)
     fn, ln = usr.split(" ")

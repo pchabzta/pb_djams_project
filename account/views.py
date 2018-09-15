@@ -18,7 +18,7 @@ import os
 from openpyxl import workbook, load_workbook
 
 
-# @login_required
+@login_required
 def gateway(request):
     if str(request.user) in ['Admin Admin', 'Preecha Bootwicha']:
 
@@ -27,7 +27,7 @@ def gateway(request):
         return HttpResponseRedirect(reverse_lazy('tenant_page'))
 
 
-# @login_required
+@login_required
 def create_contract(request):
     if request.method == 'POST':
 
@@ -74,7 +74,7 @@ def create_contract(request):
                   {'section': 'new_contract', 'tenant_form': tenant_form, 'tenant_profile_form': tenant_profile_form})
 
 
-# @login_required
+@login_required
 def edit_contract(request):
     # return render(request,'account/tenant_record.html')
 
@@ -96,7 +96,7 @@ def user_profile(request):
     return render(request, 'account/tenant_page.html', {'section': 'user_profile'})
 
 
-# @login_required
+@login_required
 def admin_page(request):
     return render(request, 'account/admin_page.html')
 
@@ -588,7 +588,7 @@ def create_exel_sheet(request):
     write_to_excel_worksheet(request, excel_f, opbl)
 
 
-# @login_required
+@login_required
 def billing(request):
     tenant_pf = TenantProfile.objects.order_by("room_no")
 

@@ -142,7 +142,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 AUTH_USER_MODEL = 'account.CustomUser'
 
 LOGIN_REDIRECT_URL = 'gateway'  # if not defined will go to: acounts/profiles !!
-LOGOUT_REDIRECT_URL = 'homepage'
+LOGOUT_REDIRECT_URL = 'Chollada_Apartment'
 LOGIN_URL = 'login'  # if not defined, will go to http://127.0.0.1:8000/accounts/login/?next=/account/
 LOGOUT_URL = 'logout'
 

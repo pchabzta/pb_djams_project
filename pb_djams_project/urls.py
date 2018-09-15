@@ -23,7 +23,7 @@ from django.views.generic.base import TemplateView
 urlpatterns = [
 
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='account/homepage.html'), name='homepage'),
+    path('', TemplateView.as_view(template_name='account/Chollada_Apartment.html'), name='Chollada_Apartment'),
     path('account/', include('django.contrib.auth.urls')),  # login/logout/password_change/reset
     path('account/', include('account.urls')),
     path('ams/misc/', include('ams.urls')),
