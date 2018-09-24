@@ -7,6 +7,7 @@ from .forms import PFormRM301A, PFormRM302A, PFormRM303A, PFormRM304A, PFormRM30
 from .forms import PFormRM201B, PFormRM202B, PFormRM203B, PFormRM204B, PFormRM205B
 from .forms import PFormRM301B, PFormRM302B, PFormRM303B, PFormRM304B, PFormRM305B
 from .forms import PFormRM401B, PFormRM402B, PFormRM403B, PFormRM404B, PFormRM405B
+from .forms import PaymentForm
 from .forms import Elec_cpu_change, Water_cpu_change, PhoneNoMessage
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -48,6 +49,41 @@ def update_pf_and_bill(roomno, cd):
 
     bill.save()
     pf.save()
+
+@login_required
+def pay_rent(request, bref):
+    tenant_bill = get_object_or_404(Billing, bill_ref=bref, status='open')
+    rmn = tenant_bill.room_no
+
+    if request.method == 'POST':
+        pay_form = PaymentForm(data=request.POST)
+
+        if pay_form.is_valid():
+            cd = pay_form.cleaned_data
+
+            # -------------------
+            update_pf_and_bill(rmn, cd)
+            # ------------------
+
+        else:
+            messages.error(request, 'Error updating Room {} Payment'.format(tenant_bill.room_no))
+
+    else:
+        pay_form = PaymentForm()
+
+    if request.method == 'POST':
+        # messages.info(request, 'Payments have been completed.')
+        messages.success(request, 'Room {}: Payment has been completed.'.format(rmn))
+        return HttpResponseRedirect(reverse_lazy('payment_individual'))
+    else:
+        return render(request, 'ams/pay_rent.html', {'tenant_bill': tenant_bill, 'pay_form': pay_form})
+
+
+@login_required
+def payment_individual(request):
+    bills = Billing.objects.filter(status='open').order_by('id')
+
+    return render(request, 'ams/payment_individual.html', {'bills': bills, 'section': 'payment_individual'})
 
 
 @login_required
@@ -565,7 +601,7 @@ def payment(request):
 
     if request.method == 'POST':
         # messages.info(request, 'Payments have been completed.')
-        messages.success(request, 'Payments have been completed.')
+        messages.success(request, 'All payments have been completed.')
 
         return HttpResponseRedirect(reverse_lazy('admin_page'))
     else:
@@ -610,6 +646,10 @@ def payment(request):
                                                     'rm405b_form': rm405b_form,
 
                                                     })
+
+
+# def payment_individual(request):
+#     return render(request, 'ams/report_type.html', {'section': 'report'})
 
 
 # @login_required
@@ -942,7 +982,8 @@ def current_tenant(request):
 
     current_dt = datetime.datetime.now()
 
-    return render(request, 'ams/current_tenant.html', {'cur_tenant': cur_tenant, 'current_dt': current_dt, 'total_tn':total_tn})
+    return render(request, 'ams/current_tenant.html',
+                  {'cur_tenant': cur_tenant, 'current_dt': current_dt, 'total_tn': total_tn})
 
 
 @login_required
@@ -989,7 +1030,7 @@ def vacant_rooms(request):
                   {'cur_tenant': cur_tenant, 'vc_rooms': vc_rooms, 'current_dt': current_dt})
 
 
-# SENDING MESSAGE FROM LOCALHOST ************************************************************************
+# SENDING MESSAGE FROM LOCALHOST AND FROM WEB !!!! **********************************************************
 def send_message(to_phone_no, msg):
     account_sid = GV.Account_SID
     auth_token = GV.Auth_Token
@@ -1005,37 +1046,29 @@ def send_message(to_phone_no, msg):
     # *************************************************************************************************
 
 
-# # SENDING MESSAGE FROM WEB ******************************************************************************
+# # SENDING MESSAGE FROM WEB ??? ****************************************************************************
 # def send_message(to_phone_no, msg):
-#
+
 #     proxy_client = TwilioHttpClient()
 #     proxy_client.session.proxies = {'https':os.environ['https_proxy']}
-#
+
 #     account_sid = GV.Account_SID
 #     auth_token = GV.Auth_Token
-#
+
 #     client = Client(account_sid, auth_token, http_client=proxy_client)
-#
+
 #     sending_phone_no = GV.Sending_Phone_No
 #     tenant_phone_no = '+66' + to_phone_no
 #     sending_message = msg
-#
+
 #     # SENDING MESSAGE ********************************************************************************
 #     message = client.messages.create(to=tenant_phone_no, from_=sending_phone_no, body=sending_message)
-#
-#
 #     # ************************************************************************************************
+
 
 @login_required
 def send_bill_sms_to_all_tenants(request):
     bills = Billing.objects.filter(status='open').order_by('id')
-
-    # FOR TESTING ONLY --------------------------------------------------------------------
-    # start_date = datetime.date(2018, 8, 1)
-    # end_date = datetime.date(2018, 8, 30)
-
-    # bills = Billing.objects.filter(bill_date__range=(start_date, end_date)).order_by('id')
-    # -------------------------------------------------------------------------------------
 
     if bills:
 
@@ -1045,7 +1078,11 @@ def send_bill_sms_to_all_tenants(request):
             rmn = rmn_bill.room_no
 
             rmn_pf = get_object_or_404(TenantProfile, room_no__room_no=rmn)
-            rmn_hp = rmn_pf.phone
+
+            # --------------------------------------------------
+            # rmn_hp = rmn_pf.phone # TEMP. OFF
+            rmn_hp = '0840860087'  # TESTING ONLY'
+            # -------------------------------------------------
 
             bill_dt = rmn_bill.bill_date.date()
             cur_mth = bill_dt.month
@@ -1077,10 +1114,10 @@ def send_bill_sms_to_all_tenants(request):
                                        osc,
                                        ovd)
 
-            print(rmn_hp, ': ', bill_msg)
+            # print(rmn_hp, ': ', bill_msg)
 
             # -------------------------------
-            # send_message(rmn_hp, bill_msg) # TURNED OFF-FOR TESTING
+            send_message(rmn_hp, bill_msg)  # TURNED OFF-FOR TESTING
             # -------------------------------
             no_of_bills_sent += 1
 
@@ -1158,9 +1195,14 @@ def send_general_sms(request):
             phn = cd['phone_no']
             msg = cd['sms_msg']
 
-            send_message(phn, msg)
-            messages.success(request, 'SMS has been sent to: {} !!'.format(phn))
-            return HttpResponseRedirect(reverse_lazy('misc_contents'))
+            try:
+                send_message(phn, msg)
+            except Exception as err:
+                messages.error(request, 'ERROR: {}'.format(str(err)))
+                return HttpResponseRedirect(reverse_lazy('misc_contents'))
+            else:
+                messages.success(request, 'SMS has been sent to: {} !!'.format(phn))
+                return HttpResponseRedirect(reverse_lazy('misc_contents'))
     else:
         phone_msg_form = PhoneNoMessage()
         return render(request, 'ams/send_general_sms.html', {'phone_msg_form': phone_msg_form})
@@ -1211,6 +1253,7 @@ def tenant_page(request):
         return render(request, 'ams/tenant_page.html',
                       {'section': 'tenant_profile', 'tenant_pf': tenant_pf, 'room_acc_cost': room_acc_cost,
                        'oth_ser_cost': oth_ser_cost, 'cur_dt': cur_dt})
+
 
 @login_required
 def tenant_bill(request):
@@ -1281,6 +1324,7 @@ def tenant_bill(request):
 
         # NEW TENANT ******************************************
         return HttpResponseRedirect(reverse_lazy('new_tenant'))
+
 
 @login_required
 def new_tenant(request):

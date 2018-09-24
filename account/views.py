@@ -76,10 +76,11 @@ def create_contract(request):
 
 @login_required
 def edit_contract(request):
+    bills = Billing.objects.filter(status='open').order_by('id')
     # return render(request,'account/tenant_record.html')
 
     # messages.success(request, 'TEST MESSAGE')
-    # messages.info(request,'INFO MESSAGE')
+    # messages.info(request,'INFO MESSASSAGE
     # messages.warning(request,'WARNING MESSAGE')
 
     return render(request, 'account/edit_contract.html', {'section': 'edit_contract'})

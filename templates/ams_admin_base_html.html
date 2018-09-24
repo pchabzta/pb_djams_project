@@ -38,15 +38,16 @@
                 <a href="{% url "create_contract" %}">New Contract</a>
             </li>
 
-            <li {% if section == "edit_contract" %}class="selected"{% endif %}>
-                <a href="{% url "edit_contract" %}">Edit Contract</a>
-            </li>
-
             <li {% if section == "billing" %}class="selected"{% endif %}>
                 <a href="{% url "billing" %}">Billing</a>
             </li>
+
+            <li {% if section == "payment_individual" %}class="selected"{% endif %}>
+                <a href="{% url "payment_individual" %}">Payment (Individual)</a>
+            </li>
+
             <li {% if section == "payment" %}class="selected"{% endif %}>
-                <a href="{% url "payment" %}">Payment</a>
+                <a href="{% url "payment" %}">Payment (All)</a>
             </li>
 
             <li {% if section == "report" %}class="selected"{% endif %}>

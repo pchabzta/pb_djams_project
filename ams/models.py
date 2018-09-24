@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Room_type(models.Model):
@@ -52,3 +53,8 @@ class Billing(models.Model):
 
     def __str__(self):
         return 'Bill for room number: {} Status: {}'.format(self.room_no, self.status)
+        # return self.bill_ref
+
+    def get_absolute_url(self):
+        return reverse('pay_rent', args=[str(self.bill_ref)])
+

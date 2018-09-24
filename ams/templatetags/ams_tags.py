@@ -54,6 +54,15 @@ def display_tenant_bill_data(rmno):
     return {'tenant_bill': tenant_bill}
 
 
+@register.inclusion_tag('ams/payment_individual_tag.html')
+def display_individual_tenant_bill_data(rmno):
+    tenant_bill = get_object_or_404(Billing, room_no=rmno, status='open')
+
+    room_cost_acc = tenant_bill.room_cost + tenant_bill.room_acc_cost + tenant_bill.adjust
+
+    return {'tenant_bill': tenant_bill, 'room_cost_acc': room_cost_acc}
+
+
 @register.simple_tag
 def room_acc_cost(rmno):
     tenant_pf = get_object_or_404(TenantProfile, room_no__room_no=rmno)

@@ -1,5 +1,14 @@
 from django import forms
 
+class PaymentForm(forms.Form):
+    payment_amount = forms.DecimalField(max_digits=7, decimal_places=2,
+                                        widget=forms.NumberInput(
+                                            attrs={'class': 'paid_amount', 'placeholder': 'paid_amount', 'min': 0}))
+    payment_date = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'class': 'pay_date', 'placeholder': 'pay_date'}))
+
+
+
 
 class PFormRM101A(forms.Form):
     payment_amount = forms.DecimalField(max_digits=7, decimal_places=2,
