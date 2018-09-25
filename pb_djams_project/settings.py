@@ -84,11 +84,7 @@ WSGI_APPLICATION = 'pb_djams_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'djams_db',
-        # 'NAME': 'djamsx_db',
-        # 'NAME': 'dj_amms_db', # Blank not used yet
         'NAME': 'pb_djams_db',
-
         'USER': 'root',
         'PASSWORD': 'pbdb',
         'HOST': 'localhost',

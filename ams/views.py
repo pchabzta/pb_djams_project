@@ -73,7 +73,7 @@ def pay_rent(request, bref):
 
     if request.method == 'POST':
         # messages.info(request, 'Payments have been completed.')
-        messages.success(request, 'Room {}: Payment has been completed.'.format(rmn))
+        messages.success(request, 'Room {}: Payment has been completed !!!'.format(rmn))
         return HttpResponseRedirect(reverse_lazy('payment_individual'))
     else:
         return render(request, 'ams/pay_rent.html', {'tenant_bill': tenant_bill, 'pay_form': pay_form})
@@ -600,8 +600,8 @@ def payment(request):
                 rm405b_form = PFormRM405B(prefix='rm405b')
 
     if request.method == 'POST':
-        # messages.info(request, 'Payments have been completed.')
-        messages.success(request, 'All payments have been completed.')
+        # messages.info(request, 'Payments have been completed !!!')
+        messages.success(request, 'All payments have been completed !!!')
 
         return HttpResponseRedirect(reverse_lazy('admin_page'))
     else:
