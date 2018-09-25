@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d3cd1ff7-5e8b-4337-af0a-14c3e49757ed" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="d3cd1ff7-5e8b-4337-af0a-14c3e49757ed" name="Default Changelist" comment="pb_djams_project">
+      <change beforePath="$PROJECT_DIR$/pb_requirements.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +123,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pb_djams_project/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
+            <state relative-caret-position="-42">
               <caret line="93" lean-forward="true" selection-start-line="93" selection-end-line="93" />
             </state>
           </provider>
@@ -478,7 +478,14 @@
       <option name="project" value="LOCAL" />
       <updated>1537847440942</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="pb_djams_project">
+      <created>1537851054795</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1537851054795</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TodoView">
@@ -492,7 +499,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1381" height="925" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4981203" visible="true" weight="0.24867725" />
       <window_info id="Structure" order="1" sideWeight="0.5018797" side_tool="true" weight="0.21390778" />
@@ -508,7 +514,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49811035" weight="0.3299748" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5011338" side_tool="true" weight="0.32871535" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4988662" weight="0.32871535" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4988662" visible="true" weight="0.32871535" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.3299748" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -853,7 +859,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pb_djams_project/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
+        <state relative-caret-position="-42">
           <caret line="93" lean-forward="true" selection-start-line="93" selection-end-line="93" />
         </state>
       </provider>
