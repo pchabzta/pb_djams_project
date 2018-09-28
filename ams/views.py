@@ -27,6 +27,25 @@ import GV
 
 @login_required
 def tenant_comment(request):
+    # ---TEST ONLY-------------
+    # from pb_djams_project import settings
+
+    # os.environ['SECRET_KEY'] = '75#^koi!0f__)fr2_3x#4qoatbv0wgp=+4(msc12!cav)gv@3&'
+    # print(os.environ['SECRET_KEY'])
+
+    # os.chdir("c:\\users\\preechab\\dj_exel_file")
+
+    # excel_f = 'Month_Billing.xlsx'
+
+    # cwd = os.getcwd()
+    # bd = settings.BASE_DIR
+    #
+    # os.chdir(bd)
+    #
+    # messages.info(request, 'BASE_DIR: {}'.format(bd))
+    # messages.info(request, 'CWD: {}'.format(cwd))
+    # ---------------------------
+
     return render(request, 'ams/tenant_comment.html', {'section': 'comment'})
 
 
@@ -49,6 +68,7 @@ def update_pf_and_bill(roomno, cd):
 
     bill.save()
     pf.save()
+
 
 @login_required
 def pay_rent(request, bref):
@@ -1255,74 +1275,70 @@ def tenant_page(request):
                        'oth_ser_cost': oth_ser_cost, 'cur_dt': cur_dt})
 
 
+def tenant_bill_subroutine(tn_bill):
+    bill_dt = tn_bill.bill_date.date()
+    cur_day = bill_dt.day  # added
+    cur_mth = bill_dt.month
+    cur_yr = bill_dt.year
+    cur_th_mth = get_thai_month_name(str(bill_dt))
+    cur_th_yr = get_thai_year(str(bill_dt))
+    next_dt_mth = datetime.date(cur_yr, cur_mth + 1, 15)
+    next_th_m = get_thai_month_name(str(next_dt_mth))
+
+    room_with_acc_cost = tn_bill.room_cost + tn_bill.room_acc_cost + tn_bill.adjust
+    if tn_bill.status == 'open':
+        paid_str = 'รอชำระ'
+    else:
+        paid_str = 'ชำระแล้ว ณ วันที่ {} {} {}'.format(cur_day, cur_th_mth, cur_yr)
+
+    # TEMPORARY UNTIL OVD OF RM204A HAS BEEN COVERED
+    rn = tn_bill.room_no
+    if rn == '204A':
+        bill_total = tn_bill.bill_total - tn_bill.overdue_amount + 1000
+    else:
+        bill_total = tn_bill.bill_total
+
+    return room_with_acc_cost, bill_total, paid_str, cur_th_mth, next_th_m, cur_th_yr
+
+
 @login_required
 def tenant_bill(request):
     tenant = str(request.user)
     bills = Billing.objects.filter(tenant_name=tenant)
+
     if bills:
         try:
             tn_bill = get_object_or_404(Billing, tenant_name=tenant, status='open')
 
         except Exception as err:
             # messages.error(request, 'ERROR: {} '.format(str(err)))
-            now_month = str(datetime.datetime.now().month - 1)
 
-            tn_bill = get_object_or_404(Billing, tenant_name=tenant, status='close', bill_date__month=now_month)
-
-            bill_dt = tn_bill.bill_date.date()
-            cur_day = bill_dt.day
-            cur_mth = bill_dt.month
-            cur_yr = bill_dt.year
-            cur_th_mth = get_thai_month_name(str(bill_dt))
-            cur_th_yr = get_thai_year(str(bill_dt))
-            next_dt_mth = datetime.date(cur_yr, cur_mth + 1, 15)
-            next_th_m = get_thai_month_name(str(next_dt_mth))
-
-            room_with_acc_cost = tn_bill.room_cost + tn_bill.room_acc_cost + tn_bill.adjust
-
-            paid_str = 'ชำระแล้ว ณ วันที่ {} {} {}'.format(cur_day, cur_th_mth, cur_yr)
-
-            # TEMPORARY UNTIL OVD OF RM204A HAS BEEN COVERED
-            rn = tn_bill.room_no
-            if rn == '204A':
-                bill_total = tn_bill.bill_total - tn_bill.overdue_amount + 1000
+            bill_month = str(datetime.datetime.now().month)
+            tnb_qs = Billing.objects.filter(tenant_name=tenant, status='close', bill_date__month=bill_month)
+            if tnb_qs:
+                tn_bill = get_object_or_404(Billing, tenant_name=tenant, status='close', bill_date__month=bill_month)
             else:
-                bill_total = tn_bill.bill_total
-            # -------------------------------------------------------------------
+                bill_month = str(datetime.datetime.now().month - 1)
+                tn_bill = get_object_or_404(Billing, tenant_name=tenant, status='close', bill_date__month=bill_month)
+
+            room_with_acc_cost, bill_total, paid_str, cur_th_mth, next_th_m, cur_th_yr = tenant_bill_subroutine(tn_bill)
 
             return render(request, 'ams/tenant_bill.html',
                           {'section': 'bill', 'tn_bill': tn_bill, 'room_with_acc_cost': room_with_acc_cost,
                            'bill_total': bill_total, 'cur_th_mth': cur_th_mth, 'next_th_m': next_th_m,
                            'cur_th_yr': cur_th_yr, 'paid_str': paid_str})
-
         else:
 
-            bill_dt = tn_bill.bill_date.date()
-            cur_mth = bill_dt.month
-            cur_yr = bill_dt.year
-            cur_th_mth = get_thai_month_name(str(bill_dt))
-            cur_th_yr = get_thai_year(str(bill_dt))
-            next_dt_mth = datetime.date(cur_yr, cur_mth + 1, 15)
-            next_th_m = get_thai_month_name(str(next_dt_mth))
-
-            room_with_acc_cost = tn_bill.room_cost + tn_bill.room_acc_cost + tn_bill.adjust
-            paid_str = 'รอชำระ'
-
-            # TEMPORARY UNTIL OVD OF RM204A HAS BEEN COVERED
-            rn = tn_bill.room_no
-            if rn == '204A':
-                bill_total = tn_bill.bill_total - tn_bill.overdue_amount + 1000
-            else:
-                bill_total = tn_bill.bill_total
-            # ===============================================
+            room_with_acc_cost, bill_total, paid_str, cur_th_mth, next_th_m, cur_th_yr = tenant_bill_subroutine(tn_bill)
 
             return render(request, 'ams/tenant_bill.html',
                           {'section': 'bill', 'tn_bill': tn_bill, 'room_with_acc_cost': room_with_acc_cost,
                            'bill_total': bill_total, 'cur_th_mth': cur_th_mth, 'next_th_m': next_th_m,
                            'cur_th_yr': cur_th_yr, 'paid_str': paid_str})
+
     else:
 
-        # NEW TENANT ******************************************
+        # NEW TENANT
         return HttpResponseRedirect(reverse_lazy('new_tenant'))
 
 

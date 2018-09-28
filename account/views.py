@@ -194,10 +194,17 @@ def create_bill(room_no):
 
     total = room_cost + room_acc_cost + elec_cost + water_cost + com_ser_cost + oth_ser_cost + ovd_amt + adj
 
-    new_bill = Billing(bill_ref=get_ref_string(), tenant_name=tname, room_no=rno,
-                       room_cost=room_cost, room_acc_cost=room_acc_cost, electricity_cost=elec_cost,
-                       water_cost=water_cost, common_ser_cost=com_ser_cost, other_ser_cost=oth_ser_cost,
-                       overdue_amount=ovd_amt, adjust=adj, bill_total=total,
+    new_bill = Billing(bill_ref=get_ref_string(),
+                       tenant_name=tname,
+                       room_no=rno,
+                       room_cost=room_cost,
+                       room_acc_cost=room_acc_cost,
+                       electricity_cost=elec_cost,
+                       water_cost=water_cost,
+                       common_ser_cost=com_ser_cost,
+                       other_ser_cost=oth_ser_cost,
+                       overdue_amount=ovd_amt,
+                       adjust=adj, bill_total=total,
 
                        )
 
@@ -632,6 +639,7 @@ def billing(request):
     rm404b_form = None
     rm405b_form = None
 
+    no_of_bill = 0
     for tpf in tenant_pf:
         rmn = tpf.room_no.room_no
 
@@ -645,6 +653,7 @@ def billing(request):
                     # -------------------
                     create_bill(rmn)
 
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 101A Billing')
@@ -655,7 +664,7 @@ def billing(request):
                     rm102a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
-
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 102A Billing')
@@ -666,7 +675,7 @@ def billing(request):
                     rm103a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
-
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 103A Billing')
@@ -678,6 +687,7 @@ def billing(request):
                     rm104a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 104A Billing')
@@ -689,6 +699,7 @@ def billing(request):
                     rm105a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 105A Billing')
@@ -700,6 +711,7 @@ def billing(request):
                     rm106a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 106A Billing')
@@ -711,6 +723,7 @@ def billing(request):
                     rm201a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 201A Billing')
@@ -722,6 +735,7 @@ def billing(request):
                     rm202a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 202A Billing')
@@ -733,6 +747,7 @@ def billing(request):
                     rm203a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 203A Billing')
@@ -744,6 +759,7 @@ def billing(request):
                     rm204a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 204A Billing')
@@ -755,6 +771,7 @@ def billing(request):
                     rm205a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 205A Billing')
@@ -766,6 +783,7 @@ def billing(request):
                     rm206a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 206A Billing')
@@ -777,6 +795,7 @@ def billing(request):
                     rm301a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 301A Billing')
@@ -788,6 +807,7 @@ def billing(request):
                     rm302a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 302A Billing')
@@ -799,6 +819,7 @@ def billing(request):
                     rm303a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 303A Billing')
@@ -810,6 +831,7 @@ def billing(request):
                     rm304a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 304A Billing')
@@ -821,6 +843,7 @@ def billing(request):
                     rm305a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 305A Billing')
@@ -832,6 +855,7 @@ def billing(request):
                     rm306a_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 306A Billing')
@@ -843,6 +867,7 @@ def billing(request):
                     rm201b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 201B Billing')
@@ -854,6 +879,7 @@ def billing(request):
                     rm202b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 202B Billing')
@@ -865,6 +891,7 @@ def billing(request):
                     rm203b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 203B Billing')
@@ -876,6 +903,7 @@ def billing(request):
                     rm204b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 204B Billing')
@@ -887,6 +915,7 @@ def billing(request):
                     rm205b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 205B Billing')
@@ -898,6 +927,7 @@ def billing(request):
                     rm301b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 301B Billing')
@@ -909,6 +939,7 @@ def billing(request):
                     rm302b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 302B Billing')
@@ -920,6 +951,7 @@ def billing(request):
                     rm303b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 303B Billing')
@@ -931,6 +963,7 @@ def billing(request):
                     rm304b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 304B Billing')
@@ -942,6 +975,7 @@ def billing(request):
                     rm305b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 305B Billing')
@@ -953,6 +987,7 @@ def billing(request):
                     rm401b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 401B Billing')
@@ -964,6 +999,7 @@ def billing(request):
                     rm402b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 402B Billing')
@@ -975,6 +1011,7 @@ def billing(request):
                     rm403b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 403B Billing')
@@ -986,6 +1023,7 @@ def billing(request):
                     rm404b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 404B Billing')
@@ -997,6 +1035,7 @@ def billing(request):
                     rm405b_form.save(commit=True)
                     # -------------------
                     create_bill(rmn)
+                    no_of_bill += 1
                     # ------------------
                 else:
                     messages.error(request, 'Error updating Room 405B Billing')
@@ -1103,8 +1142,12 @@ def billing(request):
 
     if request.method == 'POST':
 
-        # WRITE TO BILL SUMMARY AND BILL SLIP
+        # WRITE TO BILL SUMMARY AND BILL SLIP (Localhost only, at this time !!!!)
         create_exel_sheet(request)
+
+        # -----------------
+        # FOR PYTHONANYWHERE HOST (uncomment the following line !!)
+        # messages.success(request, 'Total {} bills created.'.format(no_of_bill))
         # -----------------
         return HttpResponseRedirect(reverse_lazy('admin_page'))
     else:

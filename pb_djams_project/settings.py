@@ -22,9 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'w7a*y+fj&z$ms94p4$34ot1k6!*3%lfa=akm^s&%g^r^28bnsx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -143,3 +143,14 @@ LOGIN_URL = 'login'  # if not defined, will go to http://127.0.0.1:8000/accounts
 LOGOUT_URL = 'logout'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# ITEMS TO DEFY BEFORE DEPLOYMENT
+# SESSION_COOKIE_SECURE = True
+# SECURE_CONTENT_TYPE_NOSNIFF =True
+# SECURE_BROWSER_XSS_FILTER  = True
+# SECURE_SSL_REDIRECT = True
+# CSRF_COOKIE_SECURE  = True
+# X_FRAME_OPTIONS = 'DENY'
+# SECURE_HSTS_SECONDS = 60
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
